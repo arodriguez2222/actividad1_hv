@@ -1,7 +1,10 @@
 
-//d3.dsv(";", "01001.csv").then(function (datos) {
-d3.dsv(";", "https://ine.es/jaxi/files/_px/en/csv_bdsc/t35/p011/rev19/serie/l0/01001.csv_bdsc?nocab=1")
+d3.dsv(";", "01001.csv").then(function (datos) {
+    //lineas de código para importar datos desde la web.
+    /*
+    d3.dsv(";", "https://ine.es/jaxi/files/_px/en/csv_bdsc/t35/p011/rev19/serie/l0/01001.csv_bdsc?nocab=1")
     .then(function (datos) {
+    */
     console.log("Inicio de la actividad 1 - carga de datos")
 
     // Extrae valores únicos de los productos
