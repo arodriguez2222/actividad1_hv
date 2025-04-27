@@ -119,7 +119,7 @@ d3.dsv(";", "01001.csv").then(function (datos) {
             }
             // Llama a la función para mostrar el cuadro
             MostrarCuadro(datoFinal);
-            GraficoLineasProducto(datoFinal);
+            GraficoLineasProducto(datosOrdenados,productosUnicos);
         });
 
 
@@ -150,7 +150,7 @@ d3.dsv(";", "01001.csv").then(function (datos) {
             }
             // Llama a la función para mostrar el cuadro
             MostrarCuadro(datoFinal);
-            GraficoLineasProducto(datoFinal);
+            GraficoLineasProducto(datoFinal,productosUnicos);
         });
 
     periodoSeleccionado = "Todos";
@@ -231,13 +231,21 @@ function MostrarCuadro(datos) {
         .text(d => d);
 }
 
-function GraficoLineasProducto(datos) {
+function GraficoLineasProducto(datos,productosUnicos) {
     // Hace un gráfico de líneas cuando se ha seleccionado todos los periodos y un solo producto
     const margin = { top: 20, right: 30, bottom: 50, left: 60 };
-    const ancho = 600 - margin.left - margin.right;
+    const ancho = 450 - margin.left - margin.right;
     const alto = 400 - margin.top - margin.bottom;
     
     d3.select("#grafico").selectAll("*").remove();
+
+    // agrupo los datos por producto para poder gráficar cada uno de ellos con un color diferente
+    const datosPorProducto = d3.group(datos, d => d.Productos);
+    // se define una escala de colores para cada producto
+    // schemeObservable10 tomado de: https://d3js.org/d3-scale-chromatic/categorical
+    const color = d3.scaleOrdinal()
+    .domain(productosUnicos)
+    .range(d3.schemeObservable10);
     
     // Escalas
     const escalaX = d3.scalePoint()
@@ -251,7 +259,7 @@ function GraficoLineasProducto(datos) {
     // Crear SVG con grupo interno con márgenes
     const svg = d3.select("#grafico")
       .append("svg")
-      .attr("width", ancho + margin.left + margin.right)
+      .attr("width", ancho + margin.left + margin.right + 200)
       .attr("height", alto + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -262,12 +270,43 @@ function GraficoLineasProducto(datos) {
       .y(d => escalaY(d.Total));
     
     // Dibujar la línea
-    svg.append("path")
+    /*svg.append("path")
       .datum(datos)
       .attr("d", linea)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
-      .attr("stroke-width", 2);
+      .attr("stroke-width", 2);*/
+
+    // Dibujar líneas para cada producto
+      datosPorProducto.forEach((valores, producto) => {
+        svg.append("path")
+          .datum(valores)
+          .attr("d", linea) 
+          .attr("fill", "none")
+          .attr("stroke", color(producto))
+          .attr("stroke-width", 2);
+      });
+    // crear leyenda
+    const leyenda = svg.append("g")
+    .attr("transform", `translate(${ancho + 20}, 0)`);
+    
+    // muestra los productos con su color correspondiente
+    productosUnicos.forEach((producto, i) => {
+        const item = leyenda.append("g")
+        .attr("transform", `translate(0, ${i * 20})`);
+      
+        item.append("rect")
+          .attr("width", 10)
+          .attr("height", 10)
+          .attr("fill", color(producto));
+      
+        item.append("text")
+          .attr("x", 10)
+          .attr("y", 9)
+          .text(producto)
+          .style("font-size", "8px")
+          .attr("fill", "black");
+    });
     
     // Ejes
     svg.append("g")
