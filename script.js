@@ -119,7 +119,7 @@ d3.dsv(";", "01001.csv").then(function (datos) {
             }
             // Llama a la función para mostrar el cuadro
             MostrarCuadro(datoFinal);
-            GraficoLineasProducto(datosOrdenados,productosUnicos);
+            //GraficoLineasProducto(datosOrdenados,productosUnicos);
         });
 
 
