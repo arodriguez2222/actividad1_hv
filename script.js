@@ -33,26 +33,34 @@ d3.dsv(";", "01001.csv").then(function (datos) {
     console.log("Crea los filtros dentro de la tabla de filtros")
     creaEtiquetasFiltros();
     creaSelectFiltros(periodosUnicos, productosUnicos);
-    
-    // Agrega la acción change al select de periodos, toma en consideración lo filtrado en el select de productos
-    // según esto hará el cuadro y el gráfico
-    creaEventoOnChangeProducto(datosOrdenados, periodoSeleccionado, productoSeleccionado);
-    // Agrega la acción change al select de productos, toma en consideración lo filtrado en el select de periodos
-    // según esto hará el cuadro y el gráfico
-    creaEventoOnChangePeriodo(datosOrdenados, periodoSeleccionado, productoSeleccionado);
-    
+
+    // Establece valores por defecto al select de periodos y productos
     periodoSeleccionado = "Todos";
     productoSeleccionado = "Todos los productos";
-    // Establece un valor por defecto en el select de periodos
+
+
+    // Agrega la acción change al select de prouctos, toma en consideración lo filtrado en el select de productos
+    // según esto hará el cuadro y el gráfico
+    creaEventoOnChangeProducto(datosOrdenados, periodoSeleccionado, productoSeleccionado);
+
+    // Agrega la acción change al select de periodos, toma en consideración lo filtrado en el select de periodos
+    // según esto hará el cuadro y el gráfico
+    creaEventoOnChangePeriodo(datosOrdenados, periodoSeleccionado, productoSeleccionado);
+
+
+    console.log("asigna el change al producto")
+    console.log("asigla el change al periodo")
+
     d3.select("#periodo")
         .property("value", periodoSeleccionado)
         .dispatch("change");
 
-    // Establece un valor por defecto en el select de productos
     d3.select("#producto")
         .property("value", productoSeleccionado)
-        .dispatch("change");
+        .dispatch("change")
     
+    
+    console.group("Termina el código");
 });
 
 function AsignaTituloCuadro(productoSeleccionado, periodoSeleccionado) {
@@ -82,17 +90,14 @@ function AsignaTituloGrafico(productoSeleccionado, periodoSeleccionado) {
 
 // esta función muestra la tabla mostrando la información del dataset según los filtros seleccionados
 function mostrarCuadroDatos(datos) {
-    console.log("entra a mostrar cuadro")
     // Crea la variable cuadro, con la selección del DIV con el mismo nombre
     var cuadro = d3.select("#cuadro");
     // Selecciona la tabla existente en el DIV
     tabla = cuadro.select("#tabla")
     if (tabla.empty()) {
-        console.log("crea la tabla")
         // En caso no exista crea la tabla y la cabecera de la tabla
         tabla = cuadro.append("table").attr("id", "tabla");
 
-        console.log("crea el encabezado")
         // Crea el encabezado de la tabla (fila con los títulos)
         var RowEncabezado = d3.select("#tabla");
         RowEncabezado.append("thead").attr("id", "encabezado").append("tr").attr("id", "FilaPrincipal");
@@ -100,23 +105,17 @@ function mostrarCuadroDatos(datos) {
         // Crea las columnas del encabezado
         creaTituloCuadroDatos();
 
-        console.log("Termina la creación de la tabla y la fila de títulos");
     }
     
-    console.log("creación del cuerpo de la tabla");
     // Crea variable con cuerpo de la tabla, en caso esté vacía la crea en la tabla, en caso contrario las elimina
     var contenido = tabla.select("tbody");
     if (contenido.empty()) {
-        console.log("entra a crear el tbody");
         contenido = tabla.append("tbody").attr("id", "contenido");
     } else {
-        console.log("elimina las filas");
         contenido.selectAll("tr").remove();
     }
-    console.log("creación del cuerpo terminado");
     
     // Agrega filas a la tabla
-    console.log("creación de filas")
     var filas = contenido.selectAll("tr")
         .data(datos)
         .enter()
@@ -353,7 +352,6 @@ function creaGraficoBarrasProducto(datos) {
         .style("font-size", "10px");    
 }
 
-
 function ordenarDatos(datos) {
     // Paso 1: Limpiar los datos, eliminando las comas y convirtiendo a números
     const datosLimpios = datos.map(d => ({
@@ -587,14 +585,19 @@ function limpiarDescripcion(descripcion) {
 function creaEventoOnChangePeriodo(datosOrdenados, periodoSeleccionado, productoSeleccionado){
     d3.select("#periodo")
         .on("change", function () {
-            console.log("selecciona un periodo");
+            console.log("#change periodo - periodo seleccionado");
             periodoSeleccionado = this.value;
 
+            console.log("#change periodo - producto seleccionado")
+            productoSeleccionado = d3.select("#producto").property("value");
+            
             //* Asigna el título del DIV
+            console.log("#change periodo - asigna títulos al cuadro y al gráfico")
             AsignaTituloCuadro(productoSeleccionado, periodoSeleccionado);
             AsignaTituloGrafico(productoSeleccionado, periodoSeleccionado);
 
             // Filtra el dataset según el producto seleccionado, es este nuevo dataset filtrado sobre el que se hace el cuadro y el gráficcc
+            console.log("#change periodo - filtra dataset")
             if (productoSeleccionado == "Todos los productos") {
                 // En caso se haya seleccionado "Todos los Producctos" no hace filtro y envía todo
                 if (periodoSeleccionado == "Todos") {
@@ -609,11 +612,17 @@ function creaEventoOnChangePeriodo(datosOrdenados, periodoSeleccionado, producto
                     var datoFinal = datosOrdenados.filter(d => d.Productos === productoSeleccionado && d.periodo === periodoSeleccionado);
                 }
             }
+            
             // Llama a la función para mostrar el cuadro
+            console.log("#change periodo - muestra el dataset en un tabla")
             mostrarCuadroDatos(datoFinal);
+
+            // Llama a la función para mostrar el gráfico
             if (periodoSeleccionado === "Todos") {
+                console.log("#change periodo - muestra el gráfico de líneas")
                 creaGraficoLineasProducto(datoFinal);
             } else {
+                console.log("#change periodo - muestra el gráfico de barras")
                 creaGraficoBarrasProducto(datoFinal);
             }
         });
@@ -623,14 +632,20 @@ function creaEventoOnChangePeriodo(datosOrdenados, periodoSeleccionado, producto
 function creaEventoOnChangeProducto(datosOrdenados, periodoSeleccionado, productoSeleccionado) {
     d3.select("#producto")
         .on("change", function () {
-            console.log("selecciona un periodo");
+
+            console.log("#change producto - producto seleccionado");
             productoSeleccionado = this.value;
 
+            console.log("#change producto - periodo seleccionado")
+            periodoSeleccionado = d3.select("#periodo").property("value");
+
             //* Asigna el título del DIV
+            console.log("#change producto - asigna títulos al cuadro y al gráfico")
             AsignaTituloCuadro(productoSeleccionado, periodoSeleccionado);
             AsignaTituloGrafico(productoSeleccionado, periodoSeleccionado);
 
             // Filtra el dataset según el producto seleccionado, es este nuevo dataset filtrado sobre el que se hace el cuadro y el gráficcc
+            console.log("#change producto - filtra dataset")
             if (productoSeleccionado == "Todos los productos") {
                 // En caso se haya seleccionado "Todos los Producctos" no hace filtro y envía todo
                 if (periodoSeleccionado == "Todos") {
@@ -645,11 +660,17 @@ function creaEventoOnChangeProducto(datosOrdenados, periodoSeleccionado, product
                     var datoFinal = datosOrdenados.filter(d => d.Productos === productoSeleccionado && d.periodo === periodoSeleccionado);
                 }
             }
+            
             // Llama a la función para mostrar el cuadro
+            console.log("#change producto - muestra el dataset en un table")
             mostrarCuadroDatos(datoFinal);
+
+            // Llama a la función para mostrar el gráfico
             if (periodoSeleccionado === "Todos") {
+                console.log("#change producto - muestra el gráfico de líneas")
                 creaGraficoLineasProducto(datoFinal);
             } else {
+                console.log("#change producto - muestra el gráfico de barras")
                 creaGraficoBarrasProducto(datoFinal);
             }
         });
