@@ -58,3 +58,7 @@ Ante cualquier novedad, contactar con los desarrolladores de este trabajo:
 
 
 ***LINK REPOSITORIO:*** [https://github.com/arodriguez2222/actividad1_hv/tree/pruebacarlos](https://github.com/arodriguez2222/actividad1_hv/tree/pruebacarlos)
+
+
+
+**Copyright 2025**
