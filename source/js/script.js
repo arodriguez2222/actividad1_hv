@@ -328,10 +328,27 @@ function creaGraficoBarrasProducto(datos) {
     svg.append("g")
       .call(d3.axisLeft(escalaY))
       .style("font-size", "12px");
+    
+      // Título del eje X
+    svg.append("text")
+    .attr("x", ancho / 2) // Centrado horizontalmente
+    .attr("y", alto + 30) // Posicionado debajo del eje X
+    .attr("text-anchor", "middle") // Centrado el texto
+    .style("font-size", "12px")
+    .text("Productos");
+
+    // Título del eje Y
+    svg.append("text")
+    .attr("x", -(alto / 2)) // Centrado verticalmente (rotado)
+    .attr("y", -margin.left + 10) // Posicionado a la izquierda del eje Y
+    .attr("transform", "rotate(-90)") // Rotación para el eje Y
+    .attr("text-anchor", "middle") // Centrado el texto
+    .style("font-size", "12px")
+    .text("Total de Ventas (Euros)");
 
     // Leyenda debajo del gráfico
     const leyenda = svg.append("g")
-        .attr("transform", `translate(0, ${alto + 20})`);  // Aseguramos que la leyenda esté debajo
+        .attr("transform", `translate(0, ${alto + 40})`);  // Aseguramos que la leyenda esté debajo
 
     const columnas = 2;  // Número de columnas
     const itemWidth = 280;  // Ancho de cada ítem de leyenda

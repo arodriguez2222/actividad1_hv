@@ -16,3 +16,12 @@ Se agregaron filtros para que el usuario pueda analizar la información con mayo
 
 4. El producto **Servicios de provisión de alimentos y bebidas** fue el que generó mayor número de ventas en el período analizado. Haciendo un enfasis en la revisión de la tendencia con la gráfica: ![Servicios de provisión de alimentos y bebidas](/source/photo/servicio_provi_aliment_bebidas.png)
 Gracias a las estratégias de marketing derivadas, a pesar de la caida en el 2020, el equipo logró recuperar las ventas con los clientes tanto en 2021 cómo en 2022 siendo este último año el de mayor crecimiento, sobrepasando las ventas que se tenían en 2019 pre pandemía. 
+
+5. El producto con menos ventas fue el de **servicio de transporte de pasajeros por agua** que aunque tenía unas ventas no mayores a 500 Euros pre pandemía, se redujo significativamente cerca de un 71% en el año 2020 por la emergencia de salud, llegando a un valor de ventas de 79 Euros. Gracias al levantamiento de las medidas sanitarias de restricción de confinamiento de las personas en casa y la estratégia de la compañia, durante los años 2021 y 2022, se lograron ventas por encima de los años pre pandemía logrando un aumento para 2022 de 463 Euros, cercano al 64% comparado con las ventas del año 2019. ![Servicios de transporte de pasajeros por agua](/source/photo/servicio_transporte_pasa_agua.png)
+
+***NOTA:*** El gráfico de líneas se muestra cuando en el período el filtro está en **"Todos"**.
+
+Finalmente, se agrega un gráfico de barras que permite ver el valor total de ventas de todos los productos por 1 año o periodo en específico. Para ver este gráfico se debe seleccional en el filtro de periodo, un valor diferente a **Todos**. 
+![Gráfico de barras por producto - año 2019 pre pandemia](/source/photo/diagrama_barras_year.png)
+
+Este informe se presenta complemento a los análisis detallados por la compañía según el usuario consultante.
